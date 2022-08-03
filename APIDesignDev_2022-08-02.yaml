@@ -1,0 +1,237 @@
+_type: export
+__export_format: 4
+__export_date: 2022-08-02T21:41:53.944Z
+__export_source: insomnia.desktop.app:v2022.4.2
+resources:
+  - _id: req_wrk_acfe6531b2144a21bf8081f7ad6fb49c31003c6a
+    parentId: wrk_acfe6531b2144a21bf8081f7ad6fb49c
+    modified: 1659467075722
+    created: 1659467075722
+    url: "{{ base_url }}/users"
+    name: returns all users
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1659467075722
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: wrk_acfe6531b2144a21bf8081f7ad6fb49c
+    parentId: null
+    modified: 1659366249639
+    created: 1659366249639
+    name: New Document
+    description: ""
+    scope: design
+    _type: workspace
+  - _id: req_fbd2d909820a497d8a560b4876de9f36
+    parentId: wrk_acfe6531b2144a21bf8081f7ad6fb49c
+    modified: 1659366249655
+    created: 1659366249655
+    url: ""
+    name: New Request
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1659366249655
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_c9dc258d95d8a31f17505a0b2efbc857a6b39636
+    parentId: wrk_acfe6531b2144a21bf8081f7ad6fb49c
+    modified: 1659366249649
+    created: 1659366249649
+    name: Base Environment
+    data:
+      base_url: "{{ scheme }}://{{ host }}{{ base_path }}"
+    dataPropertyOrder: null
+    color: null
+    isPrivate: false
+    metaSortKey: 1659366249649
+    _type: environment
+  - _id: jar_c9dc258d95d8a31f17505a0b2efbc857a6b39636
+    parentId: wrk_acfe6531b2144a21bf8081f7ad6fb49c
+    modified: 1659366249651
+    created: 1659366249651
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar
+  - _id: spc_9cfe2ddf352f4d77a9907f106362d792
+    parentId: wrk_acfe6531b2144a21bf8081f7ad6fb49c
+    modified: 1659476373609
+    created: 1659366249647
+    fileName: RESTful API Design and Development - Training
+    contents: |
+      openapi: 3.0.1
+      info:
+        title: Engine 1
+        version: '1.0'
+        description: This is the api definitions for the first engine
+        termsOfService: https://www.example.com/tos
+        contact:
+          email: support@example.com
+          name: Support
+          url: https://www.example.com/support
+        license:
+          name: License
+          url: https://www.example.com/license
+      servers:
+        - url: http://localhost:{port}
+          description: My local fake server
+          variables:
+            port:
+              default: '3000'
+              enum:
+                - '3000'
+                - '3001'
+              description: ports for dev & test (3001)
+        - url: https://my-json-server.typicode.com/bearc0025/api
+          variables: {}
+          description: "Bear Cahill's fake server at github"
+      paths:
+        /users:
+          summary: get level operations
+          description: create and update users in the database
+          get:
+            summary: returns all users
+            description: fetch all users from the database
+            operationId: fetchUsers
+            responses:
+              2XX:
+                $ref: '#/components/responses/UserArrayRespBody'
+              default:
+                description: Default error sample response
+            tags:
+              - users
+          post:
+            summary: create a new user
+            description: store a user in the database
+            operationId: createUser
+            requestBody:
+              $ref: '#/components/requestBodies/UserPostBody'
+            responses:
+              2XX:
+                $ref: '#/components/responses/UserRespBody'
+              default:
+                description: Default error sample response
+            tags:
+              - users
+        /users/{userId}:
+          summary: individual user operations
+          description: get, update, delete a user
+          parameters:
+            - name: userId
+              in: path
+              required: true
+              description: the user id
+              schema:
+                type: string
+                example: qwerty
+          get:
+            summary: fetch a user
+            description: returns a user from the server/database
+            operationId: fetchUser
+            responses:
+              '200':
+                $ref: '#/components/responses/UserRespBody'
+              default:
+                description: Default error sample response
+            tags:
+              - users
+      components:
+        responses:
+          UserArrayRespBody:
+            description: successful query
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/UserArray'
+          UserRespBody:
+            description: successful query
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/FullUser'
+        requestBodies:
+          UserPostBody:
+            description: body of User to send to server
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/PostNewUser'
+        schemas:
+          UserArray:
+            type: array
+            items:
+              $ref: '#/components/schemas/FullUser'
+          PostNewUser:
+            type: object
+            properties:
+              username:
+                type: string
+                example: bear
+              score:
+                type: integer
+                example: 55
+              active:
+                type: boolean
+                example: true
+            required:
+              - username
+              - score
+              - active
+          FullUser:
+            allOf:
+              - $ref: '#/components/schemas/PostNewUser'
+              - type: object
+                properties:
+                  id:
+                    type: string
+                    example: qwerty
+                  username:
+                    type: string
+                    example: bear
+                  score:
+                    example: 10
+                  active:
+                    type: boolean
+                    example: true
+    contentType: yaml
+    _type: api_spec
+  - _id: uts_686295438c654cd8bb42d8ba3fe0e8ea
+    parentId: wrk_acfe6531b2144a21bf8081f7ad6fb49c
+    modified: 1659366249657
+    created: 1659366249657
+    name: Example Test Suite
+    _type: unit_test_suite
+  - _id: env_env_c9dc258d95d8a31f17505a0b2efbc857a6b39636_sub
+    parentId: env_c9dc258d95d8a31f17505a0b2efbc857a6b39636
+    modified: 1659467075724
+    created: 1659467075724
+    name: OpenAPI env
+    data:
+      scheme: https
+      base_path: /bearc0025/api
+      host: my-json-server.typicode.com
+    dataPropertyOrder: null
+    color: null
+    isPrivate: false
+    metaSortKey: 1659467075724
+    _type: environment
