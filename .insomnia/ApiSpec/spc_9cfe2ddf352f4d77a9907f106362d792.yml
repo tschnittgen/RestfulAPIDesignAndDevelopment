@@ -1,0 +1,168 @@
+_id: spc_9cfe2ddf352f4d77a9907f106362d792
+type: ApiSpec
+parentId: wrk_acfe6531b2144a21bf8081f7ad6fb49c
+modified: 1659540159378
+created: 1659366249647
+fileName: RESTful API Design and Development - Training
+contents: |
+  openapi: 3.0.1
+  info:
+    title: Engine 1
+    version: '1.0'
+    description: This is the api definitions for the first engine
+    termsOfService: https://www.example.com/tos
+    contact:
+      email: support@example.com
+      name: Support
+      url: https://www.example.com/support
+    license:
+      name: License
+      url: https://www.example.com/license
+  servers:
+    - url: http://localhost:{port}
+      description: My local fake server
+      variables:
+        port:
+          default: '3000'
+          enum:
+            - '3000'
+            - '3001'
+          description: ports for dev & test (3001)
+    - url: https://my-json-server.typicode.com/bearc0025/api
+      variables: {}
+      description: "Bear Cahill's fake server at github"
+  paths:
+    /users:
+      summary: get level operations
+      description: create and update users in the database
+      get:
+        summary: returns all users
+        description: fetch all users from the database
+        operationId: fetchUsers
+        responses:
+          2XX:
+            $ref: '#/components/responses/UserArrayRespBody'
+          default:
+            description: Default error sample response
+        tags:
+          - users
+      post:
+        summary: create a new user
+        description: store a user in the database
+        operationId: createUser
+        requestBody:
+          $ref: '#/components/requestBodies/UserPostBody'
+        responses:
+          2XX:
+            $ref: '#/components/responses/UserRespBody'
+          default:
+            description: Default error sample response
+        tags:
+          - users
+    /users/{userId}:
+      summary: individual user operations
+      description: get, update, delete a user
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      get:
+        summary: fetch a user
+        description: returns a user from the server/database
+        operationId: fetchUser
+        responses:
+          '200':
+            $ref: '#/components/responses/UserRespBody'
+          default:
+            description: Default error sample response
+        tags:
+          - users
+      delete:
+        summary: delete a user
+        description: remove a user from the database
+        operationId: deleteUser
+        responses:
+          default:
+            description: Default error sample response
+        tags:
+          - users
+      patch:
+        summary: update a user
+        description: update a user from the database
+        operationId: patchUser
+        requestBody:
+          $ref: '#/components/requestBodies/UserPostBody'
+        responses:
+          2XX:
+            $ref: '#/components/responses/UserRespBody'
+          default:
+            description: Default error sample response
+        tags:
+          - users
+  components:
+    parameters:
+      UserId:
+        name: userId
+        in: path
+        required: true
+        description: the user id
+        schema:
+          type: string
+          example: qwerty
+    responses:
+      UserArrayRespBody:
+        description: successful query
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserArray'
+      UserRespBody:
+        description: successful query
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FullUser'
+    requestBodies:
+      UserPostBody:
+        description: body of User to send to server
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostNewUser'
+    schemas:
+      UserArray:
+        type: array
+        items:
+          $ref: '#/components/schemas/FullUser'
+      PostNewUser:
+        type: object
+        properties:
+          username:
+            type: string
+            example: bear
+          score:
+            type: integer
+            example: 55
+          active:
+            type: boolean
+            example: true
+        required:
+          - username
+          - score
+          - active
+      FullUser:
+        allOf:
+          - $ref: '#/components/schemas/PostNewUser'
+          - type: object
+            properties:
+              id:
+                type: string
+                example: qwerty
+              username:
+                type: string
+                example: bear
+              score:
+                example: 10
+              active:
+                type: boolean
+                example: true
+contentType: yaml
