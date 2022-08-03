@@ -1,0 +1,135 @@
+{
+    "_type": "export",
+    "__export_format": 4,
+    "__export_date": "2022-08-02T21:40:37.247Z",
+    "__export_source": "insomnia.desktop.app:v2022.4.2",
+    "resources":
+    [
+        {
+            "_id": "req_wrk_acfe6531b2144a21bf8081f7ad6fb49c31003c6a",
+            "parentId": "wrk_acfe6531b2144a21bf8081f7ad6fb49c",
+            "modified": 1659467075722,
+            "created": 1659467075722,
+            "url": "{{ base_url }}/users",
+            "name": "returns all users",
+            "description": "",
+            "method": "GET",
+            "body":
+            {},
+            "parameters":
+            [],
+            "headers":
+            [],
+            "authentication":
+            {},
+            "metaSortKey": -1659467075722,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "wrk_acfe6531b2144a21bf8081f7ad6fb49c",
+            "parentId": null,
+            "modified": 1659366249639,
+            "created": 1659366249639,
+            "name": "New Document",
+            "description": "",
+            "scope": "design",
+            "_type": "workspace"
+        },
+        {
+            "_id": "req_fbd2d909820a497d8a560b4876de9f36",
+            "parentId": "wrk_acfe6531b2144a21bf8081f7ad6fb49c",
+            "modified": 1659366249655,
+            "created": 1659366249655,
+            "url": "",
+            "name": "New Request",
+            "description": "",
+            "method": "GET",
+            "body":
+            {},
+            "parameters":
+            [],
+            "headers":
+            [],
+            "authentication":
+            {},
+            "metaSortKey": -1659366249655,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "env_c9dc258d95d8a31f17505a0b2efbc857a6b39636",
+            "parentId": "wrk_acfe6531b2144a21bf8081f7ad6fb49c",
+            "modified": 1659366249649,
+            "created": 1659366249649,
+            "name": "Base Environment",
+            "data":
+            {
+                "base_url": "{{ scheme }}://{{ host }}{{ base_path }}"
+            },
+            "dataPropertyOrder": null,
+            "color": null,
+            "isPrivate": false,
+            "metaSortKey": 1659366249649,
+            "_type": "environment"
+        },
+        {
+            "_id": "jar_c9dc258d95d8a31f17505a0b2efbc857a6b39636",
+            "parentId": "wrk_acfe6531b2144a21bf8081f7ad6fb49c",
+            "modified": 1659366249651,
+            "created": 1659366249651,
+            "name": "Default Jar",
+            "cookies":
+            [],
+            "_type": "cookie_jar"
+        },
+        {
+            "_id": "spc_9cfe2ddf352f4d77a9907f106362d792",
+            "parentId": "wrk_acfe6531b2144a21bf8081f7ad6fb49c",
+            "modified": 1659476373609,
+            "created": 1659366249647,
+            "fileName": "RESTful API Design and Development - Training",
+            "contents": "openapi: 3.0.1\ninfo:\n  title: Engine 1\n  version: '1.0'\n  description: This is the api definitions for the first engine\n  termsOfService: https://www.example.com/tos\n  contact:\n    email: support@example.com\n    name: Support\n    url: https://www.example.com/support\n  license:\n    name: License\n    url: https://www.example.com/license\nservers:\n  - url: http://localhost:{port}\n    description: My local fake server\n    variables:\n      port:\n        default: '3000'\n        enum:\n          - '3000'\n          - '3001'\n        description: ports for dev & test (3001)\n  - url: https://my-json-server.typicode.com/bearc0025/api\n    variables: {}\n    description: \"Bear Cahill's fake server at github\"\npaths:\n  /users:\n    summary: get level operations\n    description: create and update users in the database\n    get:\n      summary: returns all users\n      description: fetch all users from the database\n      operationId: fetchUsers\n      responses:\n        2XX:\n          $ref: '#/components/responses/UserArrayRespBody'\n        default:\n          description: Default error sample response\n      tags:\n        - users\n    post:\n      summary: create a new user\n      description: store a user in the database\n      operationId: createUser\n      requestBody:\n        $ref: '#/components/requestBodies/UserPostBody'\n      responses:\n        2XX:\n          $ref: '#/components/responses/UserRespBody'\n        default:\n          description: Default error sample response\n      tags:\n        - users\n  /users/{userId}:\n    summary: individual user operations\n    description: get, update, delete a user\n    parameters:\n      - name: userId\n        in: path\n        required: true\n        description: the user id\n        schema:\n          type: string\n          example: qwerty\n    get:\n      summary: fetch a user\n      description: returns a user from the server/database\n      operationId: fetchUser\n      responses:\n        '200':\n          $ref: '#/components/responses/UserRespBody'\n        default:\n          description: Default error sample response\n      tags:\n        - users\ncomponents:\n  responses:\n    UserArrayRespBody:\n      description: successful query\n      content:\n        application/json:\n          schema:\n            $ref: '#/components/schemas/UserArray'\n    UserRespBody:\n      description: successful query\n      content:\n        application/json:\n          schema:\n            $ref: '#/components/schemas/FullUser'\n  requestBodies:\n    UserPostBody:\n      description: body of User to send to server\n      required: true\n      content:\n        application/json:\n          schema:\n            $ref: '#/components/schemas/PostNewUser'\n  schemas:\n    UserArray:\n      type: array\n      items:\n        $ref: '#/components/schemas/FullUser'\n    PostNewUser:\n      type: object\n      properties:\n        username:\n          type: string\n          example: bear\n        score:\n          type: integer\n          example: 55\n        active:\n          type: boolean\n          example: true\n      required:\n        - username\n        - score\n        - active\n    FullUser:\n      allOf:\n        - $ref: '#/components/schemas/PostNewUser'\n        - type: object\n          properties:\n            id:\n              type: string\n              example: qwerty\n            username:\n              type: string\n              example: bear\n            score:\n              example: 10\n            active:\n              type: boolean\n              example: true\n",
+            "contentType": "yaml",
+            "_type": "api_spec"
+        },
+        {
+            "_id": "uts_686295438c654cd8bb42d8ba3fe0e8ea",
+            "parentId": "wrk_acfe6531b2144a21bf8081f7ad6fb49c",
+            "modified": 1659366249657,
+            "created": 1659366249657,
+            "name": "Example Test Suite",
+            "_type": "unit_test_suite"
+        },
+        {
+            "_id": "env_env_c9dc258d95d8a31f17505a0b2efbc857a6b39636_sub",
+            "parentId": "env_c9dc258d95d8a31f17505a0b2efbc857a6b39636",
+            "modified": 1659467075724,
+            "created": 1659467075724,
+            "name": "OpenAPI env",
+            "data":
+            {
+                "scheme": "https",
+                "base_path": "/bearc0025/api",
+                "host": "my-json-server.typicode.com"
+            },
+            "dataPropertyOrder": null,
+            "color": null,
+            "isPrivate": false,
+            "metaSortKey": 1659467075724,
+            "_type": "environment"
+        }
+    ]
+}
